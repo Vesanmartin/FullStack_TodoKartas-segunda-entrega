@@ -1,19 +1,19 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Checkout from "./pages/Checkout";
 
-/*Componentes Propios*/
-import Header from './components/Header';
-
-
-function App()
-{
-  return(
-    <>
-      <Header />
-    </>
-
-  )
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/checkout" element={<Checkout />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
