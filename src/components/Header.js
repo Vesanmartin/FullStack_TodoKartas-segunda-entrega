@@ -1,37 +1,44 @@
-import React from "react";
+import React from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
-function Header() {
+export default function Header({ onOpenCart }) {
+  const { cart } = useCart();
+  const qty = cart.reduce((s,i)=>s+i.qty,0);
+
   return (
-    <section className="banner position-relative"
-    style={{backgroundColor: '#4c3893ff'}}>
-      <div className="container text-center">
-        {/* Logo y subtítulo centrados */}
-        <img
-          src="/assets/images/banner_logo_v2.png"
-          alt="TodOKartas Logo"
-          className="banner-logo"
-          style={{ maxWidth: '200px', margin: '0 auto 1rem' }}
-        />
-        <h2>TodOKartas</h2>
-        <h3 className="banner-subtitle">La mejor mano</h3>
+    <>
+      {/* Banner lila */}
+      <section className="banner text-center py-3">
+        <div className="container position-relative">
+          <h2 className="mb-1 fw-800">TodOKartas</h2>
+          <p className="mb-0">La mejor mano</p>
 
-        {/* Botones de Login, Registro e ícono de carrito */}
-        <div className="icon-links-top mt-3">
-          <button type="button" className="btn btn-primary btn-sm me-2" id="btn-login">
-            <i className="bi bi-person"></i> Iniciar Sesión
-          </button>
+          <div className="position-absolute top-0 end-0 m-2 d-flex gap-2">
+            <Link to="/login" className="btn btn-light btn-sm">Iniciar Sesión</Link>
+            <Link to="/register" className="btn btn-outline-light btn-sm">Registrarse</Link>
 
-          <button type="button" className="btn btn-primary btn-sm me-2" id="btn-login">
-            <i className="bi bi-person"></i> Registro 
-          </button>
-
-          <button type="button" className="btn btn-primary btn-sm me-2" id="btn-login">
-            <i className="bi bi-cart"></i> carrito
-          </button>
+            {/* SOLO botón: abre sidebar (no muestra carrito permanente) */}
+            <button className="btn btn-dark btn-sm position-relative" onClick={onOpenCart}>
+              Carrito
+              {qty>0 && (
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {qty}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Navbar gris SIN enlace a Checkout */}
+      <nav className="nav-bar">
+        <div className="container d-flex justify-content-center gap-2 py-2">
+          <NavLink to="/" end className="nav-link">Home</NavLink>
+          <NavLink to="/catalogo" className="nav-link">Catálogo</NavLink>
+          {/* NO poner link a /checkout */}
+        </div>
+      </nav>
+    </>
   );
 }
-
-export default Header;

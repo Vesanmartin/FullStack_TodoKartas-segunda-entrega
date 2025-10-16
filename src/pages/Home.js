@@ -1,50 +1,49 @@
-import React from "react";
-import Banner from "../components/Banner";
-import Navbar from "../components/Navbar";
-import ProductCard from "../components/ProductCard";
-import BlogCard from "../components/BlogCard";
+import React from 'react';
+import ProductCard from '../components/ProductCard';
+import BlogCard from '../components/BlogCard';
+import { useCart } from '../context/CartContext';
 
-const productos = [
-  { id: 1, nombre: "Charizard GX", img: "/assets/images/Charizard_GX.webp" },
-  { id: 2, nombre: "Misty & Psyduck", img: "/assets/images/Misty-psyduck 193_182.webp" },
-  { id: 3, nombre: "Koraidon", img: "/assets/images/koraidon1.png" },
+const destacados = [
+  { id:'charizard-gx',  name:'Charizard GX', img:'/assets/images/Charizard_GX.webp', price:9990 },
+  { id:'misty-psyduck', name:'Misty & Psyduck', img:'/assets/images/Misty-psyduck 193_182.webp', price:54990 },
+  { id:'koraidon',      name:'Koraidon', img:'/assets/images/koraidon1.png', price:12990 },
 ];
 
- function Home() {
+export default function Home(){
+  const { add } = useCart();
+
   return (
-    <>
-      <Banner />
-      <Navbar />
-      <div className="container my-4">
-        <h2>Productos</h2>
-        <div className="row">
-          {productos.map((p) => (
-            <div className="col-md-4 mb-3" key={p.id}>
-              <ProductCard producto={p} />
-            </div>
-          ))}
-        </div>
+    <div className="container my-4">
+      <h2 className="mb-3">Productos destacados</h2>
+      <div className="row g-3">
+        {destacados.map(p=>(
+          <div className="col-12 col-sm-6 col-md-4" key={p.id}>
+            <ProductCard producto={p} onAdd={add} onOpenDetail={()=>{}} />
+          </div>
+        ))}
       </div>
 
-      <div className="container my-4">
-        <h2>Blogs</h2>
-        <div className="row">
+      <hr className="my-4"/>
+
+      <h2 className="mb-3">Blogs y noticias</h2>
+      <div className="row g-3">
+        <div className="col-md-6">
           <BlogCard
             titulo="Entrevista a Mins y Boo"
-            descripcion="Descubre los secretos de Mins y Boo en el mundo de las cartas."
+            descripcion="Secretos del mundo de las cartas con Mins y Boo."
             img="/assets/images/minscYboo1.webp"
-            enlace="/blog1"
+            enlace="#"
           />
+        </div>
+        <div className="col-md-6">
           <BlogCard
             titulo="Accesorios y tips"
-            descripcion="Explora los mejores accesorios para coleccionistas."
+            descripcion="Los imprescindibles para coleccionistas."
             img="/assets/images/magicBanner.webp"
-            enlace="/blog2"
+            enlace="#"
           />
         </div>
       </div>
-    </>
+    </div>
   );
 }
-
-export default Home;
