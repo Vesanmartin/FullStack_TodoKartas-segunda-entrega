@@ -18,7 +18,7 @@ export default function Home(){
       <div className="row g-3">
         {destacados.map(p=>(
           <div className="col-12 col-sm-6 col-md-4" key={p.id}>
-            <ProductCard producto={p} onAdd={add} onOpenDetail={()=>{}} />
+            <ProductCard producto={p} onAdd={add} />
           </div>
         ))}
       </div>

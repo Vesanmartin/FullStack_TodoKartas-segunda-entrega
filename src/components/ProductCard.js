@@ -1,6 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-export default function ProductCard({ producto, onAdd, onOpenDetail }) {
+export default function ProductCard({ producto, onAdd }) {
   return (
     <div className="card h-100 shadow-sm d-flex flex-column">
       <div
@@ -26,16 +27,13 @@ export default function ProductCard({ producto, onAdd, onOpenDetail }) {
         <h6 className="fw-600 mb-1 text-center">{producto.name}</h6>
         {producto.price != null && (
           <div className="mb-2 fw-800 text-center">
-            ${producto.price.toLocaleString("es-CL")}
-          </div>
+            ${producto.price.toLocaleString("es-CL")} 
+          </div> /*coloca el precio y Lo pasa a formato clp */
         )}
         <div className="mt-auto d-flex justify-content-center gap-2">
-          <button
-            className="btn btn-outline-primary btn-sm"
-            onClick={onOpenDetail}
-          >
+          <Link className="btn btn-outline-primary btn-sm" to={`/producto/${producto.id}`}>
             Detalle
-          </button>
+          </Link>
           <button
             className="btn btn-primary btn-sm"
             onClick={() => onAdd(producto)}

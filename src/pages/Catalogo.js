@@ -52,7 +52,7 @@ export default function Catalogo(){
       <div className="row g-3">
         {current.map(p=>(
           <div className="col-12 col-sm-6 col-md-3" key={p.id}>
-            <ProductCard producto={p} onAdd={add} onOpenDetail={()=>{}} />
+            <ProductCard producto={p} onAdd={add} />
           </div>
         ))}
         {current.length===0 && <p className="text-muted">Sin resultados.</p>}
