@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/banner_logo_v2.png";
+import logo from "../../public/assets/images/banner_logo_v2.png";
 
 export default function Banner({onOpenCart}) {
   const nav = useNavigate();
