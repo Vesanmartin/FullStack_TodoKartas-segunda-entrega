@@ -5,12 +5,14 @@ import { useCart } from '../context/CartContext';
 export default function Header({ onOpenCart }) {
   const { cart } = useCart();
   const qty = cart.reduce((s,i)=>s+i.qty,0);
+  const logo = "./assets/images/banner_logo_v2.png";
 
   return (
     <>
       {/* Banner lila */}
       <section className="banner text-center py-3">
         <div className="container position-relative">
+          <img src={logo} alt="TodOKartas Logo" className="banner-logo d-block mx-auto mb-2" />
           <h2 className="mb-1 fw-800">TodOKartas</h2>
           <p className="mb-0">La mejor mano</p>
 
