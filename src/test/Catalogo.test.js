@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import Catalogo from '../pages/Catalogo';
 import { CartProvider } from '../context/CartContext';
 
-// {/* Test1: Revisa que el catalogo se muestre sin errores al cargar */}
+{/* Test1: Revisa que el catalogo se muestre sin errores al cargar */}
 describe('Catalogo Component', () => {
   test('renders without crashing', () => {
     render(
@@ -12,7 +12,7 @@ describe('Catalogo Component', () => {
     );
   });
 
-  // {/* Test2: Verifica si aparece el mensaje "Cargando productos…" linea de codigo 45 Catalogo */}
+  {/* Test2: Verifica si aparece el mensaje "Cargando productos…" linea de codigo 45 Catalogo */}
   test('muestra mensaje de carga al iniciar', () => {
     render(
       <CartProvider>
@@ -22,7 +22,7 @@ describe('Catalogo Component', () => {
     expect(screen.getByText(/Cargando productos/i)).toBeInTheDocument();
   });
 
-  // {/* Test3: Verifica que aparece el título "Catálogo" después de cargar los datos */}
+  {/* Test3: Verifica que aparece el título "Catálogo" después de cargar los datos */}
   test('muestra título "Catálogo" después de cargar', async () => {
     render(
       <CartProvider>
@@ -48,7 +48,7 @@ describe('Catalogo Component', () => {
     });
   });
 
-  // {/* Test5: Verifica que aparece el mensaje "Sin resultados" si no hay productos que coincidan */}
+  {/* Test5: Verifica que aparece el mensaje "Sin resultados" si no hay productos que coincidan */}
   test('muestra mensaje "Sin resultados" si no hay coincidencias', async () => {
     render(
       <CartProvider>

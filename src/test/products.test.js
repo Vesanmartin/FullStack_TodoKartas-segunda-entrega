@@ -1,72 +1,87 @@
-// Tests unitarios para src/services/products.js
-// Buenas prácticas: nombres claros, comentarios, limpieza de timers para no ralentizar pruebas.
-
 import { getProducts, getProductById, getMeta } from '../services/products';
 
 describe('services/products', () => {
-  // El servicio simula latencia con setTimeout; usamos fake timers para acelerar tests.
+  {/* setup: simula latencia con setTimeout; usamos fake timers para acelerar tests */}
   beforeEach(() => {
     jest.useFakeTimers();
   });
 
+  {/* cleanup: restauramos timers reales y limpiamos mocks */}
   afterEach(() => {
     jest.useRealTimers();
     jest.clearAllMocks();
   });
 
+  {/* test 1: getProducts devuelve un array de productos después del delay simulado */}
   test('getProducts devuelve un array de productos después del delay simulado', async () => {
-    // Llamada a la función (devuelve una promesa que se resolverá cuando avancemos timers)
     const p = getProducts();
-    // Avanzar el tiempo simulado para resolver la promesa interna
     jest.advanceTimersByTime(120);
-    const products = await p;
+    const productos = await p;
 
-    // Afirmaciones básicas sobre la estructura de datos
-    expect(Array.isArray(products)).toBe(true);
-    expect(products.length).toBeGreaterThan(0);
-    expect(products[0]).toHaveProperty('id');
-    expect(products[0]).toHaveProperty('name');
-    expect(products[0]).toHaveProperty('price');
+    expect(Array.isArray(productos)).toBe(true);
+    expect(productos.length).toBeGreaterThan(0);
+    expect(productos[0]).toHaveProperty('id');
+    expect(productos[0]).toHaveProperty('name');
+    expect(productos[0]).toHaveProperty('price');
 
-    // Comprobar que cada llamada devuelve una nueva instancia de array (inmutabilidad)
     const p2 = getProducts();
     jest.advanceTimersByTime(120);
-    const products2 = await p2;
-    expect(products2).not.toBe(products); // distinta referencia
+    const productos2 = await p2;
+    expect(productos2).not.toBe(productos);
   });
 
+  {/* test 2: getProductById retorna el producto correcto o null si no existe */}
   test('getProductById retorna el producto correcto o null si no existe', async () => {
-    // Caso existente
-    const pExist = getProductById('charizard-gx');
+    const pExistente = getProductById('charizard-gx');
     jest.advanceTimersByTime(120);
-    const prod = await pExist;
-    expect(prod).not.toBeNull();
-    expect(prod.id).toBe('charizard-gx');
+    const producto = await pExistente;
+    expect(producto).not.toBeNull();
+    expect(producto.id).toBe('charizard-gx');
 
-    // Caso inexistente
-    const pMiss = getProductById('id-no-existe');
+    const pInexistente = getProductById('id-no-existe');
     jest.advanceTimersByTime(120);
-    const prodMiss = await pMiss;
-    expect(prodMiss).toBeNull();
+    const productoFaltante = await pInexistente;
+    expect(productoFaltante).toBeNull();
   });
 
-  test('getMeta retorna listas únicas de categories y rarities', async () => {
+  {/* test 3: getMeta retorna listas únicas de categorías y rarezas */}
+  test('Seretorna listas únicas de categorías y rarezas disponibles en el catálogo', async () => {
     const p = getMeta();
     jest.advanceTimersByTime(120);
     const meta = await p;
 
-    // Estructura esperada
     expect(meta).toHaveProperty('categories');
     expect(meta).toHaveProperty('rarities');
     expect(Array.isArray(meta.categories)).toBe(true);
     expect(Array.isArray(meta.rarities)).toBe(true);
 
-    // Comprobación de unicidad en arrays
     expect(new Set(meta.categories).size).toBe(meta.categories.length);
     expect(new Set(meta.rarities).size).toBe(meta.rarities.length);
 
-    // Al menos una categoría y una rareza están presentes en el mock
     expect(meta.categories.length).toBeGreaterThanOrEqual(1);
     expect(meta.rarities.length).toBeGreaterThanOrEqual(1);
+  });
+
+  {/* test 4: getProducts respeta la propiedad stock como número positivo */}
+  test('getProducts respeta la propiedad stock como número positivo', async () => {
+    const p = getProducts();
+    jest.advanceTimersByTime(120);
+    const productos = await p;
+
+    productos.forEach(p => {
+      expect(typeof p.stock).toBe('number');
+      expect(p.stock).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  {/* test 5: getProducts incluye imágenes con rutas válidas */}
+  test('Se muestran imágenes con rutas válidas', async () => {
+    const p = getProducts();
+    jest.advanceTimersByTime(120);
+    const productos = await p;
+
+    productos.forEach(p => {
+      expect(p.img).toMatch(/^\/assets\/images\/.*\.(webp|jpg|png)$/);
+    });
   });
 });
