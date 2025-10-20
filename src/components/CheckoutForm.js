@@ -22,7 +22,7 @@ export default function CheckoutForm() {
 
   return React.createElement("form", { onSubmit: handleSubmit }, [
     React.createElement("div", { className: "d-flex gap-4 flex-wrap", key: "layout" }, [
-      // 🧾 Datos del comprador (izquierda)
+      // Datos del comprador (izquierda)
       React.createElement("div", { className: "card flex-grow-1", key: "formulario" }, [
         React.createElement("div", { className: "card-header" }, "Datos para pagar"),
         React.createElement("div", { className: "card-body" }, [
@@ -58,9 +58,9 @@ export default function CheckoutForm() {
         ]),
       ]),
 
-      // 🛒 Resumen del pedido (derecha)
+      // Detalle del pedido (derecha)
       React.createElement("div", { className: "card", style: { minWidth: "320px" }, key: "resumen" }, [
-        React.createElement("div", { className: "card-header" }, "Resumen del pedido"),
+        React.createElement("div", { className: "card-header" }, "Detalle del pedido"),
         React.createElement("div", { className: "card-body" }, [
           cart.length === 0
             ? React.createElement("p", { className: "text-muted" }, "No hay productos en el carrito.")
