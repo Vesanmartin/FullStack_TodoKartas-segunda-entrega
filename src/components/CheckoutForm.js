@@ -58,7 +58,7 @@ export default function CheckoutForm() {
         ]),
       ]),
 
-      // Detalle del pedido (derecha)
+      // Detalle del pedido ( derecha )
       React.createElement("div", { className: "card", style: { minWidth: "320px" }, key: "resumen" }, [
         React.createElement("div", { className: "card-header" }, "Detalle del pedido"),
         React.createElement("div", { className: "card-body" }, [
