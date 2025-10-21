@@ -9,6 +9,7 @@ import Catalogo from './pages/Catalogo';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ProductDetail from './pages/ProductDetail';
 
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
@@ -43,22 +44,19 @@ function Shell(){
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/catalogo" element={<Catalogo />} />
-          <Route
-            path="/checkout"
-            element={
-              <ProtectedCheckout canAccess={canAccessCheckout}>
-                <Checkout onDone={() => setCanAccessCheckout(false)} />
-              </ProtectedCheckout>
-            }
-          />
+          <Route path="/producto/:id" element={<ProductDetail />} />
+          <Route path="/checkout" element={
+            <ProtectedCheckout canAccess={canAccessCheckout}>
+              <Checkout onDone={() => setCanAccessCheckout(false)} />
+            </ProtectedCheckout>
+          } />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          {/* nada de link a /checkout en otra parte */}
         </Routes>
       </main>
 
       <footer className="py-4 text-center text-muted border-top">
-        <small>© {new Date().getFullYear()} TodOKartas</small>
+        <small>© 2025 TodOKartas</small>
       </footer>
     </>
   );

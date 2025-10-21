@@ -39,7 +39,7 @@ const MOCK = [
     category: "Magic",
     rarity: "Común",
     stock: 10,
-    img: "/assets/images/veil.jpg",
+    img: "/assets/images/Magic_the_chain_veil.jpg",
     desc: "Artefacto clásico para commander."
   },
   {

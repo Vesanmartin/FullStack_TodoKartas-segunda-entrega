@@ -7,6 +7,7 @@ const destacados = [
   { id:'charizard-gx',  name:'Charizard GX', img:'/assets/images/Charizard_GX.webp', price:9990 },
   { id:'misty-psyduck', name:'Misty & Psyduck', img:'/assets/images/Misty-psyduck 193_182.webp', price:54990 },
   { id:'koraidon',      name:'Koraidon', img:'/assets/images/koraidon1.png', price:12990 },
+  
 ];
 
 export default function Home(){
@@ -18,7 +19,7 @@ export default function Home(){
       <div className="row g-3">
         {destacados.map(p=>(
           <div className="col-12 col-sm-6 col-md-4" key={p.id}>
-            <ProductCard producto={p} onAdd={add} onOpenDetail={()=>{}} />
+            <ProductCard producto={p} onAdd={add} />
           </div>
         ))}
       </div>
