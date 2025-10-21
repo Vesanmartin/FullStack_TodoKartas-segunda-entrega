@@ -33,7 +33,7 @@ export default function Home(){
             titulo="Entrevista a Mins y Boo"
             descripcion="Secretos del mundo de las cartas con Mins y Boo."
             img="/assets/images/minscYboo1.webp"
-            enlace="#"
+            enlace="/blog/minsYboo"
           />
         </div>
         <div className="col-md-6">
@@ -41,7 +41,7 @@ export default function Home(){
             titulo="Accesorios y tips"
             descripcion="Los imprescindibles para coleccionistas."
             img="/assets/images/magicBanner.webp"
-            enlace="#"
+            enlace="/blog/accesorios"
           />
         </div>
       </div>

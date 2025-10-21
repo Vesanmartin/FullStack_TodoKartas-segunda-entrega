@@ -13,6 +13,7 @@ import ProductDetail from './pages/ProductDetail';
 
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
+import BlogPage from './pages/BlogPage';
 
 
 function Shell(){
@@ -41,6 +42,7 @@ function Shell(){
           <Route path="/checkout" element={ <Checkout/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/blog/:blogId" element={<BlogPage/>} />
         </Routes>
       </main>
 
