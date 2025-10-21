@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 /**
  * Barra de búsqueda y filtros reutilizable.
@@ -32,7 +32,7 @@ export default function FiltersBar({ source = [], onChange }) {
   // Emitir cambios al padre
   useEffect(() => {
     onChange?.({ q, category, rarity, min, max, sort, pageSize });
-  }, [q, category, rarity, min, max, sort, pageSize, onChange]);
+  }, [q, category, rarity, min, max, sort, pageSize]);
 
   // Reset
   const clear = () => {
@@ -141,7 +141,9 @@ export default function FiltersBar({ source = [], onChange }) {
           </div>
 
           <div className="col-12 col-md-3 ms-auto">
-            <button className="btn btn-outline-secondary w-100 mt-2 mt-md-0" onClick={clear}>
+            <button type="button"
+            className="btn btn-outline-secondary w-100 mt-2 mt-md-0" 
+            onClick={clear}>
               Limpiar filtros
             </button>
           </div>
