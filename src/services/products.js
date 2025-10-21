@@ -54,23 +54,20 @@ const MOCK = [
   }
 ];
 
-// Simula latencia de red (opcional)
-const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 
-export async function getProducts() {
-  await delay(120);
+export function getProducts() {
   // FUTURO: return fetch('/api/products').then(r => r.json());
   return [...MOCK];
 }
 
-export async function getProductById(id) {
-  const all = await getProducts();
+export  function getProductById(id) {
+  const all =  getProducts();
   return all.find((p) => p.id === id) || null;
 }
 
 /* Helpers opcionales (pueden servir para filtros en UI) */
-export async function getMeta() {
-  const all = await getProducts();
+export  function getMeta() {
+  const all =  getProducts();
   const categories = Array.from(new Set(all.map(p => p.category)));
   const rarities   = Array.from(new Set(all.map(p => p.rarity)));
   return { categories, rarities };

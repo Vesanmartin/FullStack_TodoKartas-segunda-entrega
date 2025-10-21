@@ -14,19 +14,12 @@ import ProductDetail from './pages/ProductDetail';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 
-function ProtectedCheckout({ canAccess, children }) {
-  // Si no viene habilitado desde el carrito, redirige al Home
-  if (!canAccess) return <Navigate to="/" replace />;
-  return children;
-}
 
 function Shell(){
   const [openCart, setOpenCart] = React.useState(false);
-  const [canAccessCheckout, setCanAccessCheckout] = React.useState(false);
   const nav = useNavigate();
 
   const handleCheckoutFromCart = () => {
-    setCanAccessCheckout(true);  // habilita acceso a /checkout
     setOpenCart(false);          // cierra sidebar
     nav('/checkout');            // navega
   };
@@ -45,11 +38,7 @@ function Shell(){
           <Route path="/" element={<Home />} />
           <Route path="/catalogo" element={<Catalogo />} />
           <Route path="/producto/:id" element={<ProductDetail />} />
-          <Route path="/checkout" element={
-            <ProtectedCheckout canAccess={canAccessCheckout}>
-              <Checkout onDone={() => setCanAccessCheckout(false)} />
-            </ProtectedCheckout>
-          } />
+          <Route path="/checkout" element={ <Checkout/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

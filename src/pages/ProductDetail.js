@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getProductById } from "../services/products";
 import { useCart } from "../context/CartContext";
@@ -7,22 +7,25 @@ export default function ProductDetail() {
   const { id } = useParams();
   const { add } = useCart();
   const nav = useNavigate();
-  const [producto, setProducto] = useState(null);
+  const producto = getProductById(id);
   const [qty, setQty] = useState(1);
-
-  useEffect(() => {
-    (async () => {
-      const data = await getProductById(id);
-      setProducto(data);
-    })();
-  }, [id]);
 
   if (!producto) return null;
 
   return (
     <div className="container py-4">
-      <button className="btn btn-link px-0 mb-3" onClick={() => nav(-1)}>
-        ← Volver
+      {/* Botón Volver */}
+      <button
+        className="btn btn-outline-primary d-inline-flex align-items-center mb-4"
+        onClick={() => nav(-1)}
+        style={{
+          borderRadius: "8px",
+          fontWeight: 600,
+          gap: "6px",
+          padding: "0.4rem 0.9rem",
+        }}
+      >
+        <span style={{ fontSize: "1.2rem", lineHeight: 1 }}>←</span> Volver
       </button>
 
       <div className="row g-4 align-items-center">

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { getProducts } from '../services/products';
 import ProductCard from '../components/ProductCard';
 import FiltersBar from '../components/FiltersBar';
@@ -6,19 +6,10 @@ import { useCart } from '../context/CartContext';
 
 export default function Catalogo(){
   const { add } = useCart();
-  const [all, setAll] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const all = getProducts();
   const [filters, setFilters] = useState({ q:'', category:'', rarity:'', min:'', max:'', sort:'relevance', pageSize:12 });
   const [page, setPage] = useState(1);
 
-  useEffect(()=>{
-    (async()=>{
-      setLoading(true);
-      const data = await getProducts();
-      setAll(data);
-      setLoading(false);
-    })();
-  }, []);
 
   const apply = useCallback((items)=>{
     let out=[...items];
@@ -35,19 +26,23 @@ export default function Catalogo(){
     return out;
   },[filters]);
 
+  const handleFiltersChange = useCallback((f) => {
+    setFilters(f);
+    setPage(1);
+  }, []);
+
   const filtered = useMemo(()=>apply(all), [all, apply]);
   const totalPages = Math.max(1, Math.ceil(filtered.length / filters.pageSize));
   const pageClamp = Math.min(page, totalPages);
-  useEffect(()=>{ if(page!==pageClamp) setPage(pageClamp); }, [page, pageClamp]);
   const start = (pageClamp-1)*filters.pageSize;
   const current = filtered.slice(start, start+filters.pageSize);
 
-  if(loading) return <div className="container py-4"><p>Cargando productos…</p></div>;
+
 
   return (
     <div className="container my-4">
       <h2 className="mb-3">Catálogo</h2>
-      <FiltersBar source={all} onChange={(f)=>{ setFilters(f); setPage(1); }} />
+      <FiltersBar source={all} onChange={handleFiltersChange} />
 
       <div className="row g-3">
         {current.map(p=>(
