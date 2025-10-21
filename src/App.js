@@ -11,10 +11,10 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 
 import { CartProvider } from './context/CartContext';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext'; 
 
 function ProtectedCheckout({ canAccess, children }) {
-  // Si no viene habilitado desde el carrito, redirige al Home
+  //  Si no viene habilitado desde el carrito, redirige al Home
   if (!canAccess) return <Navigate to="/" replace />;
   return children;
 }
