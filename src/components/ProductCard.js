@@ -1,43 +1,31 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import '@testing-library/jest-dom';
+import { Link } from 'react-router-dom';
 
-import ProductCard from '../components/ProductCard'; // Asegúrate que esta ruta sea correcta
+// ProductCard: recibe `producto` ({ id, name, img, price }) y `onAdd` callback
+export default function ProductCard({ producto, onAdd }) {
+  if (!producto) return null;
+  const { id, name, img, price } = producto;
 
-describe('ProductCard Component', () => {
-  const mockProduct = {
-    id: 'charizard-gx',
-    name: 'Charizard GX',
-    img: '/assets/images/Charizard_GX.webp',
-    price: 9990
+  const formatPrice = (p) => {
+    if (p == null) return '';
+    // Formatea 12345 -> $12.345
+    return `$${String(p).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
   };
 
-  const mockAdd = jest.fn();
+  return (
+    <div className="card h-100">
+      <Link to={`/producto/${id}`} className="text-decoration-none text-dark">
+        <img src={img} className="card-img-top" alt={name} />
+      </Link>
+      <div className="card-body d-flex flex-column">
+        <h5 className="card-title">{name}</h5>
+        <p className="card-text fw-bold mt-auto">{formatPrice(price)}</p>
 
-  test('Renderiza sin errores', () => {
-    render(
-      <MemoryRouter>
-        <ProductCard producto={mockProduct} onAdd={mockAdd} />
-      </MemoryRouter>
-    );
-
-    expect(screen.getByText('Charizard GX')).toBeInTheDocument();
-    expect(screen.getByText('$9.990')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /detalle/i })).toHaveAttribute('href', '/producto/charizard-gx');
-    expect(screen.getByRole('button', { name: /agregar/i })).toBeInTheDocument();
-  });
-
-  test('Llama a onAdd al hacer click en "Agregar"', () => {
-    render(
-      <MemoryRouter>
-        <ProductCard producto={mockProduct} onAdd={mockAdd} />
-      </MemoryRouter>
-    );
-
-    const boton = screen.getByRole('button', { name: /agregar/i });
-    fireEvent.click(boton);
-
-    expect(mockAdd).toHaveBeenCalledWith(mockProduct);
-  });
-});
+        <div className="d-flex gap-2 mt-2">
+          <Link to={`/producto/${id}`} className="btn btn-outline-secondary">Detalle</Link>
+          <button className="btn btn-primary ms-auto" onClick={() => onAdd?.(producto)}>Agregar</button>
+        </div>
+      </div>
+    </div>
+  );
+}
