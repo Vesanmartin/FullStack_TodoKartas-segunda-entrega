@@ -22,9 +22,9 @@ describe('Componente BlogCard - Pruebas Front', ()=>{
 
             );
         })
-/*
+
         //Prueba 2: Muestra Titulo OK
-        test('Test 2: Muestra titulo "Leer más"',()=>{
+        test('Test 2: Muestra titulo "Leer  más"',()=>{
             render(<BlogCard />);
 
             const titulo = screen.getByText(/Leer más/i);
@@ -40,6 +40,6 @@ describe('Componente BlogCard - Pruebas Front', ()=>{
             expect(card).toHaveClass('card mb-3');
 
         })
-*/
+
 
 });
