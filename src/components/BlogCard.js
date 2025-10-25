@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+console.log("Link importado desde react-router-dom:", Link);
 export default function BlogCard({ titulo, descripcion, img, enlace }) {
   return (
     <div className="card mb-3">
