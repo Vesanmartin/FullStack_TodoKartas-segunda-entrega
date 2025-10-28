@@ -40,7 +40,7 @@ export default function Catalogo(){
 
 
   return (
-    <div className="container my-4">
+    <div className="catalogo-page container my-4">
       <h2 className="mb-3">Catálogo</h2>
       <FiltersBar source={all} onChange={handleFiltersChange} />
 
@@ -73,3 +73,5 @@ export default function Catalogo(){
     </div>
   );
 }
+  
+
