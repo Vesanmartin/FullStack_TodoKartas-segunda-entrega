@@ -10,10 +10,11 @@ import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ProductDetail from './pages/ProductDetail';
+import BlogPage from './pages/BlogPage';
+import Footer from './components/Footer';
 
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
-import BlogPage from './pages/BlogPage';
 
 
 function Shell(){
@@ -46,9 +47,7 @@ function Shell(){
         </Routes>
       </main>
 
-      <footer className="py-4 text-center text-muted border-top">
-        <small>© 2025 TodOKartas</small>
-      </footer>
+      <Footer></Footer>
     </>
   );
 }
