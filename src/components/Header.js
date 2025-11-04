@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-
+import { useAuth } from '../context/AuthContext';
 
 export default function Header({ onOpenCart }) {
   const { cart } = useCart();
   const qty = cart.reduce((s,i)=>s+i.qty,0);
+  const { user , logout } = useAuth(); //obtiene usuario actual
   const logo = "./assets/images/LogoTodoKartasReload.png";
   const bannerBg = `linear-gradient(90deg, rgba(38,0,77,.55), rgba(0,0,0,.55)),
   url(${process.env.PUBLIC_URL}/assets/images/Fondobanner_magic2.jpg)`;
@@ -27,10 +28,34 @@ export default function Header({ onOpenCart }) {
             </div>
           </Link>
 
-          {/* Acciones */}
-          <div className="d-flex gap-2">
-            <Link to="/login" className="btn btn-light btn-sm rounded-pill">Iniciar Sesión</Link>
-            <Link to="/register" className="btn btn-outline-light btn-sm rounded-pill">Registrarse</Link>
+            {/* Acciones */}
+            <div className="d-flex flex-column align-items-end">
+              {/* Muestra el nombre de usuario arriba de los botones */}
+              {user && (
+                <div className="text-white fs-5 mb-3">
+                  Bienvenido, <strong>{user.name}</strong>
+                </div>
+              )}
+
+              <div className="d-flex gap-2">
+                {!user ? (
+                  <>
+                    <Link to="/login" className="btn btn-light btn-sm rounded-pill">
+                      Iniciar Sesión
+                    </Link>
+                    <Link to="/register" className="btn btn-outline-light btn-sm rounded-pill">
+                      Registrarse
+                    </Link>
+                  </>
+                ) : (
+                  <button
+                    className="btn btn-light btn-sm rounded-pill"
+                    onClick={logout}
+                  >
+                    Cerrar Sesión
+                  </button>
+                )}
+
             <button className="btn btn-dark btn-sm rounded-pill position-relative" onClick={onOpenCart}>
               Carrito
               {qty>0 && (
@@ -39,6 +64,7 @@ export default function Header({ onOpenCart }) {
                 </span>
               )}
             </button>
+            </div>
           </div>
         </div>
       </section>
