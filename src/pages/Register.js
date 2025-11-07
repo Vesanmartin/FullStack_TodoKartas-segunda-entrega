@@ -30,22 +30,22 @@ export default function Register(){
   return (
     <div className="container mt-4" style={{maxWidth:520}}>
       <h2 className="mb-3">Crear cuenta</h2>
-      // Mostrar mensaje de error si existe 
+      {/* Mostrar mensaje de error si existe */}
       {err && <div className="alert alert-danger py-2">{err}</div>}
       <form onSubmit={submit}>
         <div className="mb-3">
           <label className="form-label">Nombre</label>
-          // Incluye validación de campo requerido (no vacío)
+          {/* Incluye validación de campo requerido (no vacío) */}
           <input className="form-control" value={name} onChange={e=>setName(e.target.value)} required/>
         </div>
         <div className="mb-3">
           <label className="form-label">Correo</label>
-          // Incluye validación de campo requerido y formato de email
+          {/* Incluye validación de campo requerido y formato de email */}
           <input type="email" className="form-control" value={email} onChange={e=>setEmail(e.target.value)} required/>
         </div>
         <div className="mb-3">
           <label className="form-label">Contraseña</label>
-          // Incluye validación de campo requerido y formato password - no visible - 
+          {/* Incluye validación de campo requerido y formato password - no visible - */}
           <input type="password" className="form-control" value={pw} onChange={e=>setPw(e.target.value)} required/>
         </div>
         <div className="mb-3">
