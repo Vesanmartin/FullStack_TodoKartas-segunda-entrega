@@ -1,12 +1,15 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
 
+//El componente recibe tres props desde su padre (App/Shell)
 export default function CartSidebar({ open, onClose, onCheckout }) {
+  //Acceso a las funciones y datos del carrito desde el contexto
   const { cart, add, sub, remove, total } = useCart();
-
   return (
     <>
+    {/* Fondo oscuro que cubre el resto de la pantalla, controlado por open. Si se clickea se cierra el carrito */}
       <div className={`cart-backdrop ${open?'open':''}`} onClick={onClose} />
+      {/* Panel del carrito, se despliega si open es true */}
       <aside className={`cart-panel ${open?'open':''}`}>
         <div className="p-3 border-bottom d-flex align-items-center justify-content-between">
           <h5 className="m-0 fw-800">Tu carrito</h5>
@@ -16,6 +19,7 @@ export default function CartSidebar({ open, onClose, onCheckout }) {
         <div className="p-3" style={{overflowY:'auto'}}>
           {cart.length===0 && <p className="text-muted">Aún no agregas productos.</p>}
           {cart.map(i=>(
+            /* Crea una linea de carrito por cada producto en el carrito, con la info del producto y botones para agregar/quitar */
             <div key={i.id} className="cart-line">
               <img src={i.img} alt={i.name} className="cart-thumb"/>
               <div className="flex-grow-1">
@@ -31,7 +35,7 @@ export default function CartSidebar({ open, onClose, onCheckout }) {
             </div>
           ))}
         </div>
-
+          {/* Parte final del carrito, enseña el total y botón para finalizar compra */}
         <div className="mt-auto p-3 border-top">
           <div className="d-flex justify-content-between mb-2">
             <span className="fw-600">Total</span>
