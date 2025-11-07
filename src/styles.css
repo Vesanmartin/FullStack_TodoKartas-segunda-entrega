@@ -361,3 +361,42 @@ footer {
   transform: translateY(-1px);
   color: #fff;
 }
+
+/* ====== Footer ocn la imagen del banner bonito ====== */
+
+
+.footer {
+  background-color: #222; /* Color de fondo */
+  color: #eee;
+  padding: 2rem 1rem;
+  text-align: center;
+  position: relative;
+  height: 70px; /* Ajustamos la altura */
+  overflow: hidden; /* Evitar que la imagen se desborde */
+}
+
+.footer__image-container {
+  margin-bottom: 1rem; /* Espaciado debajo de la imagen */
+}
+
+.footer__image {
+  width: 100%;   /* Imagen ocupa todo el ancho */
+  height: 100px;  /* ajustarse al footer */
+  object-fit: cover; /* La imagen cubre todo el espacio sin distorsionarse */
+  object-position: center; /* Muestra el centro imagen */
+  display: block;
+  margin: 0 auto; /* Centrado de imagen */
+}
+
+.footer__content {
+  position: absolute; /* Asegura que el contenido esté encima de la imagen */
+  bottom: 10px; /* Coloca el texto al fondo */
+  width: 100%;
+  z-index: 1;
+}
+
+.footer small {
+  display: block;
+  color: #fff;
+  margin-top: 10px;
+}
