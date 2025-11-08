@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react"; // maneja datos locales
+import { useAuth } from "../context/AuthContext";  // manejar autenticacion
+import { useNavigate } from "react-router-dom";  // navegar entre paginas dentro de la aplicacion react
 
 export default function Login(){
   const { login } = useAuth();

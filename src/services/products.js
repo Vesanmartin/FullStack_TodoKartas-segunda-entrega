@@ -1,4 +1,4 @@
-// Punto único de acceso a productos.
+// Punto único de acceso a productos como "base de datos".
 // Hoy usa un mock local; cuando tengas backend, reemplaza getProducts/getProductById por fetch().
 
 const MOCK = [

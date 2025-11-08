@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+//este componente BlogCard nos permite mostrar cada publicación o noticia de forma ordenada
+
 export default function BlogCard({ titulo, descripcion, img, enlace }) {
   return (
     <div className="card mb-3">

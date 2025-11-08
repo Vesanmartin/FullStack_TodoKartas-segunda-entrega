@@ -11,7 +11,7 @@ const destacados = [
 ];
 
 export default function Home(){
-  const { add } = useCart();
+  const { add } = useCart();     //agregar px al carrito desde acá
 
   return (
     <div className="container my-4">
