@@ -1,14 +1,37 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { getProducts } from '../services/products';
+import { obtenerCartas } from '../services/productsService';
 import ProductCard from '../components/ProductCard';
 import FiltersBar from '../components/FiltersBar';
 import { useCart } from '../context/CartContext';
 
 export default function Catalogo(){
   const { add } = useCart();
-  const all = getProducts();
+  /*const all = obtenerCartas();*/
+  const [allData, setCartas] = useState(null);
+  const [loading, setLoading] = useState(null);
+  const [error, setError] = useState(null);
   const [filters, setFilters] = useState({ q:'', category:'', rarity:'', min:'', max:'', sort:'relevance', pageSize:12 });
   const [page, setPage] = useState(1);
+  
+  // INICIO CARGA ASINCRONA API TODOKARTAS
+  const cargarCartas = async()=>{
+    try{
+      setLoading(true);
+      const cartas = await obtenerCartas();
+      setCartas(cartas);
+      setError(null);
+    } catch (err){
+      setError('Error al cargar productos');
+      console.error(err);
+    } finally{
+      setLoading(false);
+    }
+  }
+
+  useEffect(()=>{
+    cargarCartas();
+  },[]);
 
 
   const apply = useCallback((items)=>{
@@ -31,14 +54,19 @@ export default function Catalogo(){
     setPage(1);
   }, []);
 
+
+  const all = allData || [];
   const filtered = useMemo(()=>apply(all), [all, apply]);
+  // FIN CARGA DATOS ASINCRONA API TODOKARTAS 
+  
   const totalPages = Math.max(1, Math.ceil(filtered.length / filters.pageSize));
   const pageClamp = Math.min(page, totalPages);
   const start = (pageClamp-1)*filters.pageSize;
   const current = filtered.slice(start, start+filters.pageSize);
 
-
-
+  if(loading) return <div className='text-center'>Cargando...</div>
+  if(error) return <div className='aler alert-danger'>{error}</div>
+ 
   return (
     <div className="catalogo-page container my-4">
       <h2 className="mb-3">Catálogo</h2>
