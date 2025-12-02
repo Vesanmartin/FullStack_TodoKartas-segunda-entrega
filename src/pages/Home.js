@@ -1,17 +1,42 @@
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import BlogCard from '../components/BlogCard';
 import { useCart } from '../context/CartContext';
+import { obtenerDestacadas } from '../services/productsService';
 
-const destacados = [
-  { id:'charizard-gx',  name:'Charizard GX', img:'/assets/images/Charizard_GX.webp', price:9990 },
-  { id:'misty-psyduck', name:'Misty & Psyduck', img:'/assets/images/Misty-psyduck 193_182.webp', price:54990 },
-  { id:'koraidon',      name:'Koraidon', img:'/assets/images/koraidon1.png', price:12990 },
-  
-];
 
 export default function Home(){
   const { add } = useCart();     //agregar px al carrito desde acá
+
+  /*const all = obtenerCartas();*/
+  const [allData, setCartas] = useState(null);
+  const [loading, setLoading] = useState(null);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  
+  // INICIO CARGA ASINCRONA API TODOKARTAS
+  const cargarDestacados = async()=>{
+    try{
+      setLoading(true);
+      const cartas = await obtenerDestacadas();
+      setCartas(cartas);
+      setError(null);
+    } catch (err){
+      setError('Error al cargar productos');
+      console.error(err);
+    } finally{
+      setLoading(false);
+    }
+  }
+
+  useEffect(()=>{
+    cargarDestacados();
+  },[]);
+
+
+  const destacados = allData || [];
+  // FIN CARGA DATOS ASINCRONA API TODOKARTAS 
+
 
   return (
     <div className="container my-4">

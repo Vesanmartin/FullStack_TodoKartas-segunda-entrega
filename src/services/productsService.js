@@ -13,6 +13,18 @@ export const obtenerCartas = async() => {
     }
 }
 
+
+export const obtenerDestacadas = async() => {
+    try{
+        const response = await fetch(`${API_URL}/carta/destacados`);
+        if(!response.ok) throw new Error('Error al obtener productos');
+        return await response.json();
+    } catch(error){
+        console.error('Error: ', error);
+        throw error;
+    }
+}
+
 //Generar el api/carta/destacados y llamar a ese.
 
 export  function getProductById(id) {
