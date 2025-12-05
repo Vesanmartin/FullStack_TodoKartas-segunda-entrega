@@ -1,16 +1,50 @@
-import React, { useState } from "react";
+// ProductDetail.js
+
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getProductById } from "../services/products";
+// Importa la nueva función asíncrona
+import { getProductById } from "../services/productsService"; 
 import { useCart } from "../context/CartContext";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const { add } = useCart();
   const nav = useNavigate();
-  const producto = getProductById(id);
-  const [qty, setQty] = useState(1);
+  
+  // 1. Estado para almacenar el producto
+  const [producto, setProducto] = useState(null); 
+  // 2. Estado para manejar la carga
+  const [loading, setLoading] = useState(true); 
 
-  if (!producto) return null;
+  // El resto del componente usa el estado 'producto'
+  const [qty, setQty] = useState(1);
+  
+  // 3. useEffect para llamar a la API cuando el ID cambie
+  useEffect(() => {
+    async function loadProduct() {
+      setLoading(true);
+      // Llamada asíncrona al servicio
+      const fetchedProduct = await getProductById(id);
+      setProducto(fetchedProduct);
+      setLoading(false);
+    }
+
+    loadProduct();
+  }, [id]); // Se ejecuta cada vez que el 'id' cambia
+
+  // Manejo de estados de carga y error
+  if (loading) {
+    // Puedes poner un spinner o mensaje de carga
+    return <div className="container py-4">Cargando producto...</div>;
+  }
+  
+  if (!producto) {
+    // Si no hay producto y ya terminó de cargar
+    return <div className="container py-4">Producto no encontrado.</div>;
+  }
+
+
+  // 4. El JSX usa la variable 'producto' del estado
 
   return (
     <div className="container py-4">

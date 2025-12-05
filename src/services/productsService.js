@@ -26,11 +26,36 @@ export const obtenerDestacadas = async() => {
 }
 
 //Generar el api/carta/destacados y llamar a ese.
+/**
+ * Obtiene una carta específica por su ID.
+ * @param {string} id - El ID de la carta a buscar.
+ * @returns {object|null} El objeto carta o null si no se encuentra.
+ */
+export async function getProductById(id) {
+    try {
+        // Usamos la URL que definiste en carta.routes.js (ej: /api/carta/charizard-gx)
+        const response = await fetch(`${API_URL}/carta/${id}`);
+        
+        // Manejo de errores
+        if (!response.ok) {
+            // Si la respuesta es 404 (no encontrado), devolvemos null
+            if (response.status === 404) {
+                return null;
+            }
+            // Para otros errores (500, etc.), lanzamos una excepción
+            throw new Error(`Error en la API: ${response.statusText}`);
+        }
 
-export  function getProductById(id) {
-    const all =  obtenerCartas();
-    return all.find((p) => p.id === id) || null;
-  }
+        const productData = await response.json();
+        
+        // La API ya devolvió el objeto único, ¡lo retornamos directamente!
+        return productData; 
+
+    } catch (error) {
+        console.error("Fallo al obtener producto por ID:", error);
+        return null;
+    }
+}
 
 /* Helpers opcionales (pueden servir para filtros en UI) */
 export  function getMeta() {
