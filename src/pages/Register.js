@@ -1,57 +1,108 @@
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext"; 
 import { useNavigate } from "react-router-dom";
 
-export default function Register(){
+// Este componente muestra el formulario de registro.
+// Permite que un usuario nuevo cree su cuenta y quede guardado en MongoDB.
+export default function Register() {
+
+  // Obtenemos la función register del AuthContext.
+  // Esta función es la que realmente llama al backend.
   const { register } = useAuth();
 
-  // Se declaran constantes de estado para los campos del formulario y errores
-  // Se usa useState porque los valores cambian conforme el usuario escribe
-  // Así, se maneja en tiempo real las validaciones.
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [pw, setPw] = useState("");
-  const [pw2, setPw2] = useState("");
-  const [err, setErr] = useState("");
+  // Estados para guardar lo que el usuario escribe en el formulario.
+  const [name, setName] = useState("");   // nombre del usuario
+  const [email, setEmail] = useState(""); // correo del usuario
+  const [pw, setPw] = useState("");       // contraseña
+  const [pw2, setPw2] = useState("");     // repetir contraseña
+  const [err, setErr] = useState("");     // para mostrar mensajes de error
+
+  // useNavigate permite redirigir a otra página después de registrarse.
   const nav = useNavigate();
 
-  const submit=(e)=>{
-    e.preventDefault(); setErr("");
-    // Validacion de contraseñas coincidentes
-    if(pw!==pw2){ setErr("Las contraseñas no coinciden."); return; }
-    try{
-      //Se llama a la función register del contexto de autenticación
-      register({name, email, password:pw});
-      // Redirigir al usuario a la página principal tras el registro exitoso
+  // Esta función se ejecuta cuando el usuario hace clic en "Crear cuenta".
+  const submit = async (e) => {
+    e.preventDefault();  
+    setErr("");          
+
+    // Validamos que ambas contraseñas sean iguales.
+    if (pw !== pw2) {
+      setErr("Las contraseñas no coinciden.");
+      return;
+    }
+
+    try {
+      // Llamamos a register, que enviará los datos al backend.
+      // Con esto se crea el usuario en MongoDB.
+      await register({ nombre: name, email, password: pw });
+
+      // Si todo sale bien, enviamos al usuario al Home.
       nav("/");
-    }catch(ex){ setErr(ex.message); }
+
+    } catch (ex) {
+      // Si ocurre un error, lo mostramos debajo del título.
+      setErr(ex.message);
+    }
   };
 
   return (
-    <div className="container mt-4" style={{maxWidth:520}}>
+    <div className="container mt-4" style={{ maxWidth: 520 }}>
       <h2 className="mb-3">Crear cuenta</h2>
-      {/* Mostrar mensaje de error si existe */}
-      {err && <div className="alert alert-danger py-2">{err}</div>}
+
+      {/* Si existe un error, lo mostramos en pantalla */}
+      {err && <div className="alert alert-danger">{err}</div>}
+
+      {/* Formulario de registro */}
       <form onSubmit={submit}>
+        
+        {/* Campo para escribir el nombre */}
         <div className="mb-3">
-          <label className="form-label">Nombre</label>
-          {/* Incluye validación de campo requerido (no vacío) */}
-          <input className="form-control" value={name} onChange={e=>setName(e.target.value)} required/>
+          <label>Nombre</label>
+          <input 
+            className="form-control" 
+            value={name} 
+            onChange={e => setName(e.target.value)} 
+            required
+          />
         </div>
+
+        {/* Campo para escribir el correo */}
         <div className="mb-3">
-          <label className="form-label">Correo</label>
-          {/* Incluye validación de campo requerido y formato de email */}
-          <input type="email" className="form-control" value={email} onChange={e=>setEmail(e.target.value)} required/>
+          <label>Correo</label>
+          <input 
+            type="email" 
+            className="form-control" 
+            value={email} 
+            onChange={e => setEmail(e.target.value)} 
+            required
+          />
         </div>
+
+        {/* Campo de contraseña */}
         <div className="mb-3">
-          <label className="form-label">Contraseña</label>
-          {/* Incluye validación de campo requerido y formato password - no visible - */}
-          <input type="password" className="form-control" value={pw} onChange={e=>setPw(e.target.value)} required/>
+          <label>Contraseña</label>
+          <input 
+            type="password" 
+            className="form-control" 
+            value={pw} 
+            onChange={e => setPw(e.target.value)} 
+            required
+          />
         </div>
+
+        {/* Campo para repetir la contraseña */}
         <div className="mb-3">
-          <label className="form-label">Repite contraseña</label>
-          <input type="password" className="form-control" value={pw2} onChange={e=>setPw2(e.target.value)} required/>
+          <label>Repite contraseña</label>
+          <input 
+            type="password" 
+            className="form-control" 
+            value={pw2} 
+            onChange={e => setPw2(e.target.value)} 
+            required
+          />
         </div>
+
+        {/* Botón para enviar el formulario */}
         <button className="btn btn-primary">Crear cuenta</button>
       </form>
     </div>

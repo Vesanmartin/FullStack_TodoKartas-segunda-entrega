@@ -1,73 +1,81 @@
-import React, {createContext, useContext, useEffect, useState} from "react";
+// src/context/AuthContext.js
+import React, { createContext, useContext, useState } from "react";
 
-/*Este archivo crea un contexto de autenticación:
-- Guarda usuarios registrados y el usuario autenticado actualmente
-- Usa localStorage como base de datos local
-- Expone funciones register, login y logout
+const AuthContext = createContext(null);
 
-*/
+// URL base de tu backend Node + Mongo
+const API_URL = "http://localhost:3001/api"; 
 
-/* “BD” mínima en localStorage */
-const KEY_USERS = "tk_users";
-const KEY_AUTH  = "tk_auth";
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
 
-const AuthContext = createContext();
 
-//funcion que envuelve la aplicación 
-export function AuthProvider({children}){
+  // REGISTRO 
+  // recibe { name, email, password } desde Register.jsx
+  const register = async ({ nombre, email, password }) => {
+    const res = await fetch(`${API_URL}/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      // el backend espera { nombre, email, password }
+      body: JSON.stringify({ nombre, email, password }),
+    });
 
-  //Inicializa estado users con:
-  // usuarios guardados en localStorage
-  const [users, setUsers] = useState(()=>{
-    try{
-      const u = JSON.parse(localStorage.getItem(KEY_USERS));
-      if(u) return u;
-    // si no hay, inventa uno
-      const seed=[{email:"demo@demo.cl", password:"123456", name:"Demo"}];
-      localStorage.setItem(KEY_USERS, JSON.stringify(seed));
-      return seed;
-    }catch{ return []; }
-  });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.msg || "Error al registrar usuario");
+    }
 
-  // Aquí se guarda el usuario logueado actualmente
-  const [user, setUser] = useState(()=> {
-    try{ return JSON.parse(localStorage.getItem(KEY_AUTH)) || null; }catch{ return null; }
-  });
-
-  //Cuando cambia estado, se actualiza localStorage
-  useEffect(()=>localStorage.setItem(KEY_USERS, JSON.stringify(users)), [users]);
-  useEffect(()=>localStorage.setItem(KEY_AUTH, JSON.stringify(user)), [user]);
-
-  //Registrar nuevo usuario
-  const register = ({name, email, password})=>{
-    //Verifica que no haya otroa usuario con el mismo email
-    if(users.some(u=>u.email===email)) throw new Error("El correo ya está registrado.");
-    //crea array con todos los users (...users) más el nuevo usuario
-    const next=[...users, {name, email, password}];
-    //actualiza lista de usuarios
-    setUsers(next);
-    //logea
-    setUser({name, email});
-    return true;
+    const data = await res.json().catch(() => ({}));
+    return data;
   };
 
-    //Inicio de sesión
-  const login = ({email, password})=>{
-    //busca el email y password dentro de lista de usuarios
-    const found = users.find(u=>u.email===email && u.password===password);
-    if(!found) throw new Error("Credenciales inválidas.");
-    //si no lo encuentra, da error, si lo encuentra, actualiza estado user (logea)
-    setUser({name:found.name, email:found.email});
-    return true;
+  // LOGIN
+  const login = async ({ email, password }) => {
+    const res = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.msg || "Error al iniciar sesión");
+    }
+
+    const data = await res.json();
+
+    setUser(data.usuario || null);
+    setToken(data.token || null);
+
+    return data;
   };
 
-  //limpia user (log out)
-  const logout = ()=> setUser(null);
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+  };
+
+  const value = {
+    user,
+    token,
+    isAuthenticated: !!token,
+    register,
+    login,
+    logout,
+  };
 
   return (
-    <AuthContext.Provider value={{user, users, register, login, logout}}>
-      {children} 
+    <AuthContext.Provider value={value}>
+      {children}
     </AuthContext.Provider>
   );
 }
-export const useAuth = ()=> useContext(AuthContext);
+
+// exportar useAuth como *named export*
+export function useAuth() {
+  return useContext(AuthContext);
+}
+
+
+export default AuthProvider;

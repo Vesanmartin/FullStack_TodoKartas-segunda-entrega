@@ -1,41 +1,80 @@
-import React, { useState } from "react"; // maneja datos locales
-import { useAuth } from "../context/AuthContext";  // manejar autenticacion
-import { useNavigate } from "react-router-dom";  // navegar entre paginas dentro de la aplicacion react
+import React, { useState } from "react";
+import { useAuth } from "../context/AuthContext"; 
+import { useNavigate } from "react-router-dom";
 
-export default function Login(){
+// Este componente muestra el formulario para iniciar sesión.
+// El usuario escribe su correo y contraseña, y el sistema valida los datos
+// llamando al backend, que revisa si existe en MongoDB.
+export default function Login() {
+
+  // Obtenemos la función login del AuthContext,
+  // que es la encargada de hablar con el backend.
   const { login } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPw] = useState("");
-  const [err, setErr] = useState("");
+
+  // Estados para guardar lo que escribe el usuario.
+  const [email, setEmail] = useState(""); // correo ingresado
+  const [pw, setPw] = useState("");       // contraseña
+  const [err, setErr] = useState("");     // mensaje de error si falla el login
+
+  // useNavigate sirve para enviar al usuario a otra página si inicia sesión correctamente.
   const nav = useNavigate();
 
-  const submit = (e)=>{
-    e.preventDefault(); setErr("");
-    try{
-      login({email, password});
+  // Función que se ejecuta cuando el usuario presiona "Entrar".
+  const submit = async (e) => {
+    e.preventDefault(); // evita que el formulario recargue la página
+    setErr("");         // limpiamos errores anteriores
+
+    try {
+      // Llamamos a login(), que envía email y password al backend.
+      // Si los datos son correctos, el backend devuelve el usuario y lo guardamos.
+      await login({ email, password: pw });
+
+      // Si todo sale bien, redirigimos al inicio o catálogo.
       nav("/");
-    }catch(ex){ setErr(ex.message); }
+
+    } catch (ex) {
+      // Si ocurre un error (usuario no existe, pass incorrecta, etc.),
+      // mostramos el mensaje en pantalla.
+      setErr(ex.message);
+    }
   };
 
   return (
-    <div className="container mt-4" style={{maxWidth:480}}>
-      <h2 className="mb-3">Iniciar Sesión</h2>
-      {err && <div className="alert alert-danger py-2">{err}</div>}
+    <div className="container mt-4" style={{ maxWidth: 420 }}>
+      <h2 className="mb-3">Iniciar sesión</h2>
+
+      {/* Si hay un error (correo o clave incorrectos), se muestra aquí */}
+      {err && <div className="alert alert-danger">{err}</div>}
+
+      {/* Formulario de login */}
       <form onSubmit={submit}>
+
+        {/* Campo para escribir el correo */}
         <div className="mb-3">
-          <label className="form-label">Correo electrónico</label>
-          <input type="email" className="form-control" value={email} onChange={e=>setEmail(e.target.value)} required/>
+          <label>Correo</label>
+          <input
+            type="email"
+            className="form-control"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </div>
+
+        {/* Campo para escribir la contraseña */}
         <div className="mb-3">
-          <label className="form-label">Contraseña</label>
-          <input type="password" className="form-control" value={password} onChange={e=>setPw(e.target.value)} required/>
+          <label>Contraseña</label>
+          <input
+            type="password"
+            className="form-control"
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
+            required
+          />
         </div>
-        <div className="d-flex gap-2">
-          <button className="btn btn-primary">Ingresar</button>
-          <button type="button" className="btn btn-outline-secondary" onClick={()=>nav("/register")}>
-            Registrarme
-          </button>
-        </div>
+
+        {/* Botón para enviar los datos */}
+        <button className="btn btn-primary">Entrar</button>
       </form>
     </div>
   );

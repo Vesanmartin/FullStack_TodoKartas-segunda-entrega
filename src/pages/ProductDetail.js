@@ -2,50 +2,59 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-// Importa la nueva función asíncrona
-import { getProductById } from "../services/productsService"; 
+
+// 1) Servicio que llama al backend
+import { getProductById } from "../services/productsService";
+
+// 2) MOCK local, por si el backend no encuentra la carta
+import { getProducts } from "../services/products";
+
 import { useCart } from "../context/CartContext";
 
 export default function ProductDetail() {
-  const { id } = useParams();
+  const { id } = useParams();          // toma el :id de la URL
   const { add } = useCart();
   const nav = useNavigate();
-  
-  // 1. Estado para almacenar el producto
-  const [producto, setProducto] = useState(null); 
-  // 2. Estado para manejar la carga
-  const [loading, setLoading] = useState(true); 
 
-  // El resto del componente usa el estado 'producto'
+  const [producto, setProducto] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
-  
-  // 3. useEffect para llamar a la API cuando el ID cambie
+
+  // Carga del producto cuando cambia el id
   useEffect(() => {
     async function loadProduct() {
       setLoading(true);
-      // Llamada asíncrona al servicio
-      const fetchedProduct = await getProductById(id);
-      setProducto(fetchedProduct);
-      setLoading(false);
+      try {
+        let fetched = await getProductById(id);  // 1) intenta backend
+
+        // 2) Si el backend no lo encontró, buscamos en el MOCK
+        if (!fetched) {
+          const allMock = getProducts();
+          fetched = allMock.find(p => (p.id ?? p._id) === id) || null;
+        }
+
+        setProducto(fetched);
+      } catch (err) {
+        console.error("Error cargando producto:", err);
+        setProducto(null);
+      } finally {
+        setLoading(false);
+      }
     }
 
     loadProduct();
-  }, [id]); // Se ejecuta cada vez que el 'id' cambia
+  }, [id]);
 
-  // Manejo de estados de carga y error
+  // Estados de carga y error
   if (loading) {
-    // Puedes poner un spinner o mensaje de carga
     return <div className="container py-4">Cargando producto...</div>;
   }
-  
+
   if (!producto) {
-    // Si no hay producto y ya terminó de cargar
     return <div className="container py-4">Producto no encontrado.</div>;
   }
 
-
-  // 4. El JSX usa la variable 'producto' del estado
-
+  // Render del detalle
   return (
     <div className="container py-4">
       {/* Botón Volver */}
@@ -83,11 +92,16 @@ export default function ProductDetail() {
 
         <div className="col-md-6">
           <h1 className="h4 fw-800 mb-2">{producto.name}</h1>
+
           <div className="text-muted mb-2">
             {producto.category} · {producto.rarity}
           </div>
+
           <div className="fs-4 fw-800 mb-3">
-            ${producto.price.toLocaleString("es-CL")}
+            $
+            {producto.price != null
+              ? producto.price.toLocaleString("es-CL")
+              : ""}
           </div>
 
           <div className="d-flex align-items-center gap-2 mb-3">
@@ -96,7 +110,9 @@ export default function ProductDetail() {
               type="number"
               min="1"
               value={qty}
-              onChange={(e) => setQty(Math.max(1, Number(e.target.value || 1)))}
+              onChange={(e) =>
+                setQty(Math.max(1, Number(e.target.value || 1)))
+              }
               className="form-control"
               style={{ maxWidth: 120 }}
             />
@@ -108,7 +124,11 @@ export default function ProductDetail() {
           >
             Agregar al carrito
           </button>
-          <button className="btn btn-outline-secondary" onClick={() => nav("/catalogo")}>
+
+          <button
+            className="btn btn-outline-secondary"
+            onClick={() => nav("/catalogo")}
+          >
             Volver al catálogo
           </button>
         </div>
