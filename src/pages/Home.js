@@ -75,26 +75,10 @@ export default function Home() {
   return (
     <div className="home-page">
 
-      {/* Sección principal / portada */}
-      <section className="hero-section text-center py-5">
-        <div className="container">
-          <h1 className="mb-3">Bienvenido a TodoKartas</h1>
-          <p className="lead mb-4">
-            La mejor mano en cartas Pokémon, Magic y K-POP.
-          </p>
-          <Link to="/catalogo" className="btn btn-primary btn-lg">
-            Ver catálogo
-          </Link>
-        </div>
-      </section>
-
       {/* Sección de productos destacados */}
       <section className="container my-5">
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h2>Productos destacados</h2>
-          <Link to="/catalogo" className="btn btn-link">
-            Ver todo el catálogo
-          </Link>
         </div>
 
         {loading && <p>Cargando destacados...</p>}
@@ -115,3 +99,4 @@ export default function Home() {
     </div>
   );
 }
+
