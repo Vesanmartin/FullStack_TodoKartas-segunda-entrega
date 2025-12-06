@@ -1,13 +1,31 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';  //modulo conecta react con el dom del navegador, react muestra componentes dentro del html.
-import App from './App';   // punto de entrada logica . en app se cargan paginas rutas, etc
+import ReactDOM from 'react-dom/client';
+import App from './App';
 
-// 1) Bootstrap CSS y JS (bundle para offcanvas/tooltip/modals)
+// Router para manejar las rutas
+import { BrowserRouter } from 'react-router-dom';
+
+// Contextos globales
+import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
+
+// Bootstrap CSS y JS
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';  //funcionen menus desplegables y otros.
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-// 2) estilos personalizados *después* de Bootstrap
-import './styles.css';   // estilos "personalizados del css"
+// Estilos personalizados
+import './styles.css';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));  // crea la raiz de react se monta dentro del index. luego renderiza el comp app que contiene aplicacion
-root.render(<App />);
+// Creamos la raíz de React
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// Renderizamos la aplicación completa
+root.render(
+  <BrowserRouter>
+    <AuthProvider>
+      <CartProvider>
+        <App />
+      </CartProvider>
+    </AuthProvider>
+  </BrowserRouter>
+);
