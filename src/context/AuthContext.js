@@ -13,12 +13,12 @@ export function AuthProvider({ children }) {
 
   // REGISTRO 
   // recibe { name, email, password } desde Register.jsx
-  const register = async ({ name, email, password }) => {
+  const register = async ({ nombre, email, password }) => {
     const res = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       // el backend espera { nombre, email, password }
-      body: JSON.stringify({ nombre: name, email, password }),
+      body: JSON.stringify({ nombre, email, password }),
     });
 
     if (!res.ok) {
